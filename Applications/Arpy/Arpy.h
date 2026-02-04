@@ -120,5 +120,3 @@ private:
   void updateLEDs();
 };
 
-// Register application
-REGISTER_APPLICATION(ArpyAPP);
