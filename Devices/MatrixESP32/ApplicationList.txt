@@ -27,6 +27,7 @@ REDACTED
 Performance
 Note
 Sequencer
+Arpy
 CustomControlMap
 Lighting
 Dice
