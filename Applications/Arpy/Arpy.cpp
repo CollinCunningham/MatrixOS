@@ -17,7 +17,7 @@ Application_Info Arpy::info = {
   .visibility = true
 };
 
-void Arpy::Setup() {
+void Arpy::Setup(const vector<string>& args) {
   MLOGI("Arpy", "MIDI Pattern Sequencer Started");
 
   // Initialize state variables
