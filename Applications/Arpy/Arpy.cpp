@@ -39,10 +39,10 @@ void Arpy::Setup(const vector<string>& args) {
   MLOGI("Arpy", "Running startup animation...");
   for (int i = 11; i < 89; i++) {
     MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(&noteOn);
+    MatrixOS::MIDI::Send(noteOn);
     MatrixOS::SYS::DelayMs(22);
     MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(&noteOff);
+    MatrixOS::MIDI::Send(noteOff);
   }
 
   MLOGI("Arpy", "Initialization complete. BPM: %d, Channel: %d", BPM, MIDI_CHANNEL + 1);
@@ -52,15 +52,15 @@ void Arpy::Loop() {
   uint32_t currentTime = MatrixOS::SYS::Millis();
 
   // Process incoming MIDI messages
-  MidiPacket* midiPacket = MatrixOS::MIDI::Get(0);
-  if (midiPacket != nullptr) {
-    MidiEventHandler(midiPacket);
+  MidiPacket midiPacket;
+  if (MatrixOS::MIDI::Get(&midiPacket)) {
+    MidiEventHandler(&midiPacket);
   }
 
   // Process key events (grid buttons)
-  KeyEvent* keyEvent = MatrixOS::KeyPad::Get(0);
-  if (keyEvent != nullptr) {
-    KeyEventHandler(keyEvent);
+  KeyEvent keyEvent;
+  if (MatrixOS::KeyPad::Get(&keyEvent)) {
+    KeyEventHandler(&keyEvent);
   }
 
   // Internal clock - trigger arpeggiator at beat intervals
@@ -211,12 +211,12 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
 
 void Arpy::playArpNote(uint8_t note) {
   MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, note, 100);
-  MatrixOS::MIDI::Send(&noteOn);
+  MatrixOS::MIDI::Send(noteOn);
 }
 
 void Arpy::stopArpNote(uint8_t note) {
   MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, note, 100);
-  MatrixOS::MIDI::Send(&noteOff);
+  MatrixOS::MIDI::Send(noteOff);
 }
 
 void Arpy::compact(PressedNote arr[], size_t len) {
