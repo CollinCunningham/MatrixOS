@@ -9,7 +9,7 @@
 #include "Arpy.h"
 
 // Application metadata
-Application_Info ArpyAPP::info = {
+Application_Info Arpy::info = {
   .name = "Arpy",
   .author = "Collin Cunningham",
   .color = Color(0xFF00FF),  // Magenta
@@ -17,7 +17,7 @@ Application_Info ArpyAPP::info = {
   .visibility = true
 };
 
-void ArpyAPP::Setup() {
+void Arpy::Setup() {
   MLOGI("Arpy", "MIDI Pattern Sequencer Started");
 
   // Initialize state variables
@@ -48,7 +48,7 @@ void ArpyAPP::Setup() {
   MLOGI("Arpy", "Initialization complete. BPM: %d, Channel: %d", BPM, MIDI_CHANNEL + 1);
 }
 
-void ArpyAPP::Loop() {
+void Arpy::Loop() {
   uint32_t currentTime = MatrixOS::SYS::Millis();
 
   // Process incoming MIDI messages
@@ -70,7 +70,7 @@ void ArpyAPP::Loop() {
   }
 }
 
-void ArpyAPP::End() {
+void Arpy::End() {
   MLOGI("Arpy", "Sequencer Exited");
 
   // Stop all playing notes
@@ -85,7 +85,7 @@ void ArpyAPP::End() {
   MatrixOS::LED::Update();
 }
 
-void ArpyAPP::MidiEventHandler(MidiPacket* midiPacket) {
+void Arpy::MidiEventHandler(MidiPacket* midiPacket) {
   uint8_t channel = midiPacket->Channel();
 
   // Check if this is a Note On message
@@ -108,7 +108,7 @@ void ArpyAPP::MidiEventHandler(MidiPacket* midiPacket) {
   }
 }
 
-void ArpyAPP::KeyEventHandler(KeyEvent* keyEvent) {
+void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   // Future enhancement: Use grid buttons to trigger notes
   // For now, this sequencer primarily works via MIDI input
 
@@ -132,7 +132,7 @@ void ArpyAPP::KeyEventHandler(KeyEvent* keyEvent) {
   }
 }
 
-void ArpyAPP::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+void Arpy::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   // Check if note is already in array
   for (int i = 0; i < POLYPHONY; i++) {
     if (notesHeld[i].rootNote == note) {
@@ -150,7 +150,7 @@ void ArpyAPP::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
   MLOGD("Arpy", "Polyphony limit reached, note ignored: %d", note);
 }
 
-void ArpyAPP::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
+void Arpy::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
   // Find and remove the note from array
   for (int i = 0; i < POLYPHONY; i++) {
     if (notesHeld[i].rootNote == note) {
@@ -163,7 +163,7 @@ void ArpyAPP::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
   }
 }
 
-void ArpyAPP::respondToPresses() {
+void Arpy::respondToPresses() {
   // Play arpeggio for each held note
   for (int i = 0; i < POLYPHONY; i++) {
     if (notesHeld[i].rootNote != NULL_NOTE) {
@@ -172,7 +172,7 @@ void ArpyAPP::respondToPresses() {
   }
 }
 
-void ArpyAPP::playArpFromNoteKey(PressedNote* noot) {
+void Arpy::playArpFromNoteKey(PressedNote* noot) {
   uint8_t seqIndex = 0;
 
   // If not starting arp, increment index
@@ -209,17 +209,17 @@ void ArpyAPP::playArpFromNoteKey(PressedNote* noot) {
   noot->arpIndex = seqIndex;
 }
 
-void ArpyAPP::playArpNote(uint8_t note) {
+void Arpy::playArpNote(uint8_t note) {
   MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, note, 100);
   MatrixOS::MIDI::Send(&noteOn);
 }
 
-void ArpyAPP::stopArpNote(uint8_t note) {
+void Arpy::stopArpNote(uint8_t note) {
   MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, note, 100);
   MatrixOS::MIDI::Send(&noteOff);
 }
 
-void ArpyAPP::compact(PressedNote arr[], size_t len) {
+void Arpy::compact(PressedNote arr[], size_t len) {
   // Remove NULL_NOTE entries and shift remaining entries up
   int i = 0;
   for (; i < len && arr[i].rootNote != 0; i++);
@@ -234,7 +234,7 @@ void ArpyAPP::compact(PressedNote arr[], size_t len) {
   }
 }
 
-uint8_t ArpyAPP::noteQuantized(uint8_t note) {
+uint8_t Arpy::noteQuantized(uint8_t note) {
   // Find octave & offset
   uint8_t oct = note / 12;
   uint8_t ofs = note - (oct * 12);
@@ -254,7 +254,7 @@ uint8_t ArpyAPP::noteQuantized(uint8_t note) {
   return note;
 }
 
-void ArpyAPP::printTupleArray(PressedNote arr[], uint8_t len) {
+void Arpy::printTupleArray(PressedNote arr[], uint8_t len) {
   MLOGD("Arpy", "====START ARRAY====");
   for (int i = 0; i < len; i++) {
     MLOGD("Arpy", "INDEX %d root: %d curr: %d aidx: %d",

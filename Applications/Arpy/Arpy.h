@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MatrixOS.h"
-#include "Applications/Application.h"
+#include "Application.h"
 
 // Configuration
 #define OCTAVE           3      // determines note pitch
