@@ -81,13 +81,13 @@ struct PressedNote {
   uint8_t arpIndex;  // Current index in the arp sequence
 };
 
-class ArpyAPP : public Application {
+class Arpy : public Application {
 public:
   // Application metadata
   static Application_Info info;
 
   // Core lifecycle methods
-  void Setup() override;
+  void Setup(const vector<string>& args) override;
   void Loop() override;
   void End() override;
 
