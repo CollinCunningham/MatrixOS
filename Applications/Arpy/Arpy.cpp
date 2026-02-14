@@ -35,7 +35,7 @@ void Arpy::Setup(const vector<string>& args) {
 
   // Initialize notes held array
   for (int i = 0; i < POLYPHONY; i++) {
-    notesHeld[i] = {NULL_NOTE, NULL_NOTE, NULL_INDEX};
+    notesHeld[i] = {NULL_ID, NULL_NOTE, NULL_NOTE, NULL_INDEX};
   }
 
   // Clear LED grid
@@ -43,14 +43,14 @@ void Arpy::Setup(const vector<string>& args) {
   MatrixOS::LED::Update();
 
   // Optional: Startup animation (similar to launchpad test)
-  // MLOGI("Arpy", "Running startup animation...");
-  // for (int i = 11; i < 89; i++) {
-  //   MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
-  //   MatrixOS::MIDI::Send(noteOn);
-  //   MatrixOS::SYS::DelayMs(22);
-  //   MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
-  //   MatrixOS::MIDI::Send(noteOff);
-  // }
+  MLOGI("Arpy", "Running startup animation...");
+  for (int i = 11; i < 89; i++) {
+    MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
+    MatrixOS::MIDI::Send(noteOn);
+    MatrixOS::SYS::DelayMs(22);
+    MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
+    MatrixOS::MIDI::Send(noteOff);
+  }
 
   MLOGI("Arpy", "Initialization complete. BPM: %d, Channel: %d", BPM, MIDI_CHANNEL + 1);
 }
@@ -59,9 +59,11 @@ void Arpy::Loop() {
   uint32_t currentTime = MatrixOS::SYS::Millis();
 
   // Process incoming MIDI messages
-  MidiPacket midiPacket;
-  if (MatrixOS::MIDI::Get(&midiPacket)) {
-    MidiEventHandler(&midiPacket);
+  if (MIDI_IN_ENABLED) {
+    MidiPacket midiPacket;
+    if (MatrixOS::MIDI::Get(&midiPacket)) {
+      MidiEventHandler(&midiPacket);
+    }
   }
 
   // Process key events (grid buttons)
@@ -123,13 +125,14 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   // uint8_t noteNum = keyEvent->ID() + 36; 
   Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
   uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET); // +36 = start at C2
+  uint16_t id = keyEvent->ID();
 
   if (keyEvent->Active()) {
     handleNoteOn(MIDI_CHANNEL, noteNum, 100);
 
     // Light up the pressed key
-    Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
-    MatrixOS::LED::SetColor(xy, onColor);
+    // Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
+    MatrixOS::LED::SetColor(id, onColor);
     MatrixOS::LED::Update();
   } 
   
@@ -138,8 +141,8 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
     handleNoteOff(MIDI_CHANNEL, noteNum, 100);
 
     // Turn off the LED
-    Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
-    MatrixOS::LED::SetColor(xy, offColor);
+    // Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
+    MatrixOS::LED::SetColor(id, offColor);
     MatrixOS::LED::Update();
   }
 }
@@ -210,11 +213,17 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   newNote = noteQuantized(newNote);
   uint8_t oldNote = noot->currNote;
 
+  // Find grid xy coordinates for LED control
+  Point gridCoords = MatrixOS::KeyPad::ID2XY(noot->gridId);
+  gridCoords.x += ARPEGGIATOR_PATTERN[seqIndex][0];
+  gridCoords.y += ARPEGGIATOR_PATTERN[seqIndex][1];
+
   if (oldNote != NULL_NOTE) {
     // Stop previous note in sequence
     stopArpNote(oldNote);
-    // Light corresponding LED
-    MatrixOS::LED::SetColor(Point(x,y), offColor);
+    // Turn off corresponding LED
+    MatrixOS::LED::SetColor(gridCoords, offColor);
+    MatrixOS::LED::Update();
   }
 
   // Play new note

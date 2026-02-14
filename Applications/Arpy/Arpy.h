@@ -8,10 +8,12 @@
 #define BPM              300    // increase for faster tempo
 #define MIDI_CHANNEL     0      // MIDI channel (0-15, where 0 = channel 1)
 #define MIDI_XCC         1      // CC number for X axis control
+#define MIDI_IN_ENABLED  0
 
 #define ARP_NOTE_COUNT   6      // Number of steps in arpeggiator pattern
 #define POLYPHONY        4      // Max simultaneous notes
 #define NULL_NOTE        0
+#define NULL_ID          -1
 #define NULL_INDEX       255
 #define ROW_OFFSET       5      // Difference in notes between rows
 #define COLUMN_OFFSET    1      // ... columns
@@ -78,6 +80,7 @@ namespace ArpyColors {
 
 // Data structure for tracking pressed notes
 struct PressedNote {
+  uint16_t gridId;       // Grid ID
   uint8_t rootNote;  // The note key being pressed
   uint8_t currNote;  // Currently playing note from the arp sequence
   uint8_t arpIndex;  // Current index in the arp sequence
