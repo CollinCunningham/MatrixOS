@@ -29,9 +29,9 @@ void Arpy::Setup(const vector<string>& args) {
   // Initialize state variables
   beatInterval = 60000L / BPM;
   prevArpTime = 0L;
-  offColor = ArpyColors::off;
-  onColor = ArpyColors::white;
-  arpColor = ArpyColors::grey;
+  // offColor = ArpyColors::off;
+  // onColor = ArpyColors::white;
+  // arpColor = ArpyColors::grey;
 
   // Initialize notes held array
   for (int i = 0; i < POLYPHONY; i++) {
@@ -39,7 +39,7 @@ void Arpy::Setup(const vector<string>& args) {
   }
 
   // Clear LED grid
-  MatrixOS::LED::Fill(ArpyColors::off);
+  MatrixOS::LED::Fill(offColor);
   MatrixOS::LED::Update();
 
   // Optional: Startup animation (similar to launchpad test)
@@ -90,7 +90,7 @@ void Arpy::End() {
   }
 
   // Clear LEDs
-  MatrixOS::LED::Fill(ArpyColors::off);
+  MatrixOS::LED::Fill(offColor);
   MatrixOS::LED::Update();
 }
 

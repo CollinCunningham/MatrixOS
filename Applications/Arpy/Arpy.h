@@ -24,17 +24,20 @@ public:
   static Application_Info info;
 
   // Colors
-  namespace ArpyColors {
-    const Color white   = Color(255, 255, 255);
-    const Color grey    = Color(64, 64, 64);
-    const Color red     = Color(255, 0, 0);
-    const Color blue    = Color(0, 0, 255);
-    const Color green   = Color(0, 255, 0);
-    const Color teal    = Color(0, 255, 255);
-    const Color magenta = Color(255, 0, 255);
-    const Color yellow  = Color(255, 255, 0);
-    const Color off     = Color(0, 0, 0);
-  }
+  // namespace ArpyColors {
+  //   const Color off     = Color(0, 0, 0);
+  //   const Color white   = Color(255, 255, 255);
+  //   const Color grey    = Color(64, 64, 64);
+  //   const Color red     = Color(255, 0, 0);
+  //   const Color blue    = Color(0, 0, 255);
+  //   const Color green   = Color(0, 255, 0);
+  //   const Color teal    = Color(0, 255, 255);
+  //   const Color magenta = Color(255, 0, 255);
+  //   const Color yellow  = Color(255, 255, 0);
+  // }
+  const Color offColor   = Color(0, 0, 0);    //none/dark
+  const Color onColor = Color(255, 255, 255); //white
+  const Color arpColor  = Color(64, 64, 64);  //grey
 
   // Data structure for tracking pressed notes
   struct PressedNote {
