@@ -214,7 +214,7 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   newNote = noteQuantized(newNote);
 
   uint8_t oldNote = noot->currNote;
-  uint16_t oldGridCoords = Point(ARPEGGIATOR_PATTERN[oldSeqIndex][0],ARPEGGIATOR_PATTERN[oldSeqIndex][1]);
+  Point oldGridCoords = Point(ARPEGGIATOR_PATTERN[oldSeqIndex][0],ARPEGGIATOR_PATTERN[oldSeqIndex][1]);
 
   // Find grid xy coordinates for LED control
   Point gridCoords = MatrixOS::KeyPad::ID2XY(noot->gridId);
