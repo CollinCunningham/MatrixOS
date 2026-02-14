@@ -13,7 +13,7 @@
 #define POLYPHONY        4      // Max simultaneous notes
 #define NULL_NOTE        0
 #define NULL_INDEX       255
-#define ROW_OFFSET       8      // Difference in notes between rows
+#define ROW_OFFSET       5      // Difference in notes between rows
 
 // Musical scales
 const uint8_t dorian_scale[] = { 0, 2, 3, 5, 7, 9, 10, 12 };
@@ -26,7 +26,7 @@ const uint8_t locrian_scale[] = { 0, 1, 3, 5, 6, 8, 10, 12 };
 const uint8_t launchpad_scale[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
 // Current scale selection
-#define SYNTH_SCALE launchpad_scale
+#define SYNTH_SCALE dorian_scale
 
 // Arpeggiator patterns (x, y offsets)
 const int8_t dipper_arp[ARP_NOTE_COUNT][2] = {

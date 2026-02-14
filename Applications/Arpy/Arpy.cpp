@@ -2,7 +2,13 @@
  * Ported from Collin Cunningham's Neotrellis version for Adafruit Industries
  * Inspired by Stretta's Polygome
  *
- * Matrix OS port adaptation
+ * To Do:
+ * - light any corresponding LED for each note played
+ * - fix note to grid mapping
+ * - add config menu
+ * - add option for external clock sync
+ * - add option to select pattern
+ * - add option to select scale
  * 
  */
 
@@ -23,8 +29,8 @@ void Arpy::Setup(const vector<string>& args) {
   // Initialize state variables
   beatInterval = 60000L / BPM;
   prevArpTime = 0L;
-  offColor = ArpyColors::blue;
-  onColor = ArpyColors::magenta;
+  offColor = ArpyColors::off;
+  onColor = ArpyColors::white;
 
   // Initialize notes held array
   for (int i = 0; i < POLYPHONY; i++) {
@@ -36,14 +42,14 @@ void Arpy::Setup(const vector<string>& args) {
   MatrixOS::LED::Update();
 
   // Optional: Startup animation (similar to launchpad test)
-  MLOGI("Arpy", "Running startup animation...");
-  for (int i = 11; i < 89; i++) {
-    MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(noteOn);
-    MatrixOS::SYS::DelayMs(22);
-    MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(noteOff);
-  }
+  // MLOGI("Arpy", "Running startup animation...");
+  // for (int i = 11; i < 89; i++) {
+  //   MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
+  //   MatrixOS::MIDI::Send(noteOn);
+  //   MatrixOS::SYS::DelayMs(22);
+  //   MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
+  //   MatrixOS::MIDI::Send(noteOff);
+  // }
 
   MLOGI("Arpy", "Initialization complete. BPM: %d, Channel: %d", BPM, MIDI_CHANNEL + 1);
 }
