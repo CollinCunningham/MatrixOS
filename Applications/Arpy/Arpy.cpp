@@ -119,15 +119,20 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   // For now, this sequencer primarily works via MIDI input
 
   // Example: Map grid buttons to MIDI notes
+  // uint8_t noteNum = keyEvent->ID() + 36; 
+  Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
+  uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET_GRID); // +36 = start at C2
+
   if (keyEvent->Active()) {
-    uint8_t noteNum = keyEvent->ID() + 36; // Start at C2
     handleNoteOn(MIDI_CHANNEL, noteNum, 100);
 
     // Light up the pressed key
     Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
     MatrixOS::LED::SetColor(xy, onColor);
     MatrixOS::LED::Update();
-  } else {
+  } 
+  
+  else {
     uint8_t noteNum = keyEvent->ID() + 36;
     handleNoteOff(MIDI_CHANNEL, noteNum, 100);
 
@@ -144,7 +149,9 @@ void Arpy::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     if (notesHeld[i].rootNote == note) {
       MLOGD("Arpy", "Note already pressed: %d", note);
       return;
-    } else if (notesHeld[i].rootNote == NULL_NOTE) {
+    }
+    
+    else if (notesHeld[i].rootNote == NULL_NOTE) {
       // Add the note here
       MLOGD("Arpy", "Adding note: %d", note);
       notesHeld[i] = {note, NULL_NOTE, NULL_INDEX};
@@ -213,6 +220,9 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   // Store new note
   noot->currNote = newNote;
   noot->arpIndex = seqIndex;
+
+  // TO DO: Light corresponding LED
+  
 }
 
 void Arpy::playArpNote(uint8_t note) {
