@@ -18,12 +18,6 @@
 #define ROW_OFFSET       5      // Difference in notes between rows
 #define COLUMN_OFFSET    1      // ... columns
 
-// Current scale selection
-#define SYNTH_SCALE dorian_scale;
-
-// Current pattern selection
-#define ARP_PATTERN square_arp;
-
 // Musical scales
 const uint8_t dorian_scale[] = { 0, 2, 3, 5, 7, 9, 10, 12 };
 const uint8_t ionian_scale[] = { 0, 2, 4, 5, 7, 9, 11, 12 };
@@ -60,6 +54,10 @@ const int8_t tshape_arp[ARP_NOTE_COUNT][2] = {
   {  2, -1 }, {  2,  0 }, {  2,  1 }
 };
 
+// Current scale selection
+#define SYNTH_SCALE dorian_scale
+// Current pattern selection
+#define ARP_PATTERN square_arp
 
 class Arpy : public Application {
 public:
