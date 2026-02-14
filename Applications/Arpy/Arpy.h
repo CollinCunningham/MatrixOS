@@ -82,10 +82,10 @@ public:
   };
 
   // Current scale selection
-  int8_t synthScale = dorian_scale;
+  uint8_t synthScale[] = dorian_scale;
 
   // Current pattern selection
-  int8_t arpPattern = square_arp;
+  int8_t arpPattern[] = square_arp;
 
   // Core lifecycle methods
   void Setup(const vector<string>& args) override;
