@@ -68,7 +68,7 @@ const int8_t tshape_arp[ARP_NOTE_COUNT][2] = {
 // Colors
 namespace ArpyColors {
   const Color white   = Color(255, 255, 255);
-  const Color grey    = Color(127, 127, 127);
+  const Color grey    = Color(64, 64, 64);
   const Color red     = Color(255, 0, 0);
   const Color blue    = Color(0, 0, 255);
   const Color green   = Color(0, 255, 0);
