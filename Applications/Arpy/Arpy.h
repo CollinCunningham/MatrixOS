@@ -14,6 +14,7 @@
 #define NULL_NOTE        0
 #define NULL_INDEX       255
 #define ROW_OFFSET       5      // Difference in notes between rows
+#define COLUMN_OFFSET    1      // ... columns
 
 // Musical scales
 const uint8_t dorian_scale[] = { 0, 2, 3, 5, 7, 9, 10, 12 };

@@ -121,7 +121,7 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   // Example: Map grid buttons to MIDI notes
   // uint8_t noteNum = keyEvent->ID() + 36; 
   Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
-  uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET_GRID); // +36 = start at C2
+  uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET); // +36 = start at C2
 
   if (keyEvent->Active()) {
     handleNoteOn(MIDI_CHANNEL, noteNum, 100);
@@ -202,7 +202,7 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   }
 
   // Find & add note offsets from pattern
-  int8_t x = ARPEGGIATOR_PATTERN[seqIndex][0];
+  int8_t x = ARPEGGIATOR_PATTERN[seqIndex][0] * COLUMN_OFFSET;
   int8_t y = ARPEGGIATOR_PATTERN[seqIndex][1] * ROW_OFFSET;
 
   uint8_t newNote = noot->rootNote + x + y;
