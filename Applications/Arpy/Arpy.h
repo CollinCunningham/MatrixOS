@@ -13,7 +13,7 @@
 #define ARP_NOTE_COUNT   6      // Number of steps in arpeggiator pattern
 #define POLYPHONY        4      // Max simultaneous notes
 #define NULL_NOTE        0
-#define NULL_ID          -1
+#define NULL_ID          255
 #define NULL_INDEX       255
 #define ROW_OFFSET       5      // Difference in notes between rows
 #define COLUMN_OFFSET    1      // ... columns
@@ -122,7 +122,5 @@ private:
   uint8_t noteQuantized(uint8_t note);
   void printTupleArray(PressedNote arr[], uint8_t len);
 
-  // LED visualization
-  void updateLEDs();
 };
 
