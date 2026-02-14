@@ -31,6 +31,7 @@ void Arpy::Setup(const vector<string>& args) {
   prevArpTime = 0L;
   offColor = ArpyColors::off;
   onColor = ArpyColors::white;
+  arpColor = ArpyColors::grey;
 
   // Initialize notes held array
   for (int i = 0; i < POLYPHONY; i++) {
@@ -212,17 +213,20 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   if (oldNote != NULL_NOTE) {
     // Stop previous note in sequence
     stopArpNote(oldNote);
+    // Light corresponding LED
+    MatrixOS::LED::SetColor(Point(x,y), offColor);
   }
 
   // Play new note
   playArpNote(newNote);
+  // Light corresponding LED
+  MatrixOS::LED::SetColor(Point(x,y), arpColor);
+  MatrixOS::LED::Update();
 
   // Store new note
   noot->currNote = newNote;
   noot->arpIndex = seqIndex;
 
-  // TO DO: Light corresponding LED
-  
 }
 
 void Arpy::playArpNote(uint8_t note) {

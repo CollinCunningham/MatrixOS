@@ -66,6 +66,7 @@ const int8_t tshape_arp[ARP_NOTE_COUNT][2] = {
 // Colors
 namespace ArpyColors {
   const Color white   = Color(255, 255, 255);
+  const Color grey    = Color(127, 127, 127);
   const Color red     = Color(255, 0, 0);
   const Color blue    = Color(0, 0, 255);
   const Color green   = Color(0, 255, 0);
@@ -102,7 +103,8 @@ private:
   uint32_t prevArpTime;
   uint32_t beatInterval;
   Color offColor;
-  Color onColor;
+  Color onColor;        // Note triggered by key press
+  Color arpColor;       // Note triggered by arp sequence
 
   // Arpeggiator functions
   void handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
