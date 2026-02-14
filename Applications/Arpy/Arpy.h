@@ -35,9 +35,6 @@ public:
   //   const Color magenta = Color(255, 0, 255);
   //   const Color yellow  = Color(255, 255, 0);
   // }
-  const Color offColor   = Color(0, 0, 0);    //none/dark
-  const Color onColor = Color(255, 255, 255); //white
-  const Color arpColor  = Color(64, 64, 64);  //grey
 
   // Data structure for tracking pressed notes
   struct PressedNote {
@@ -57,7 +54,7 @@ public:
   const uint8_t locrian_scale[] = { 0, 1, 3, 5, 6, 8, 10, 12 };
   const uint8_t launchpad_scale[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   // Current scale selection
-  int8_t synthScale = dorian_scale
+  int8_t synthScale = dorian_scale;
 
   // Arpeggiator patterns (x, y offsets)
   const int8_t dipper_arp[ARP_NOTE_COUNT][2] = {
@@ -85,7 +82,7 @@ public:
     {  2, -1 }, {  2,  0 }, {  2,  1 }
   };
   // Current pattern selection
-  int8_t arpPattern = square_arp
+  int8_t arpPattern = square_arp;
 
   // Core lifecycle methods
   void Setup(const vector<string>& args) override;
@@ -101,9 +98,10 @@ private:
   PressedNote notesHeld[POLYPHONY];
   uint32_t prevArpTime;
   uint32_t beatInterval;
-  Color offColor;
-  Color onColor;        // Note triggered by key press
-  Color arpColor;       // Note triggered by arp sequence
+  
+  Color offColor  = Color(0, 0, 0);       //none/dark
+  Color onColor   = Color(255, 255, 255); //white
+  Color arpColor  = Color(64, 64, 64);    //grey
 
   // Arpeggiator functions
   void handleNoteOn(uint16_t gridId, uint8_t channel, uint8_t note, uint8_t velocity);
