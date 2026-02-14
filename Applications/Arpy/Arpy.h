@@ -18,6 +18,12 @@
 #define ROW_OFFSET       5      // Difference in notes between rows
 #define COLUMN_OFFSET    1      // ... columns
 
+  // Current scale selection
+  #define SYNTH_SCALE = dorian_scale;
+
+  // Current pattern selection
+  #define ARP_PATTERN = square_arp;
+
 // Musical scales
 const uint8_t dorian_scale[] = { 0, 2, 3, 5, 7, 9, 10, 12 };
 const uint8_t ionian_scale[] = { 0, 2, 4, 5, 7, 9, 11, 12 };
@@ -80,12 +86,6 @@ public:
     uint8_t currNote;  // Currently playing note from the arp sequence
     uint8_t arpIndex;  // Current index in the arp sequence
   };
-
-  // Current scale selection
-  uint8_t synthScale[] = dorian_scale;
-
-  // Current pattern selection
-  int8_t arpPattern[] = square_arp;
 
   // Core lifecycle methods
   void Setup(const vector<string>& args) override;
