@@ -173,7 +173,7 @@ void Arpy::handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity) {
     if (notesHeld[i].rootNote == note) {
       MLOGD("Arpy", "Removing note: %d", note);
       stopArpNote(notesHeld[i].currNote);
-      notesHeld[i] = {NULL_NOTE, NULL_NOTE, NULL_INDEX};
+      notesHeld[i] = {NULL_ID, NULL_NOTE, NULL_NOTE, NULL_INDEX};
       compact(notesHeld, POLYPHONY);
       return;
     }
@@ -191,13 +191,14 @@ void Arpy::respondToPresses() {
 
 void Arpy::playArpFromNoteKey(PressedNote* noot) {
   uint8_t seqIndex = 0;
+  uint8_t oldSeqIndex = noot->arpIndex;
 
   // If not starting arp, increment index
-  if (noot->arpIndex == NULL_INDEX) {
+  if (oldSeqIndex == NULL_INDEX) {
     seqIndex = 0;
     MLOGD("Arpy", "Starting arp for note: %d", noot->rootNote);
   } else {
-    seqIndex = noot->arpIndex + 1;
+    seqIndex = oldSeqIndex + 1;
   }
 
   // Loop sequence
@@ -211,7 +212,9 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
 
   uint8_t newNote = noot->rootNote + x + y;
   newNote = noteQuantized(newNote);
+
   uint8_t oldNote = noot->currNote;
+  uint16_t oldGridCoords = Point(ARPEGGIATOR_PATTERN[oldSeqIndex][0],ARPEGGIATOR_PATTERN[oldSeqIndex][1])
 
   // Find grid xy coordinates for LED control
   Point gridCoords = MatrixOS::KeyPad::ID2XY(noot->gridId);
@@ -223,7 +226,7 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
     // Stop previous note in sequence
     stopArpNote(oldNote);
     // Turn off corresponding LED
-    MatrixOS::LED::SetColor(noteToGridId(oldNote), offColor);
+    MatrixOS::LED::SetColor(oldGridCoords, offColor);
     MatrixOS::LED::Update();
   }
 
