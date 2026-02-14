@@ -18,11 +18,11 @@
 #define ROW_OFFSET       5      // Difference in notes between rows
 #define COLUMN_OFFSET    1      // ... columns
 
-  // Current scale selection
-  #define SYNTH_SCALE = dorian_scale;
+// Current scale selection
+#define SYNTH_SCALE dorian_scale;
 
-  // Current pattern selection
-  #define ARP_PATTERN = square_arp;
+// Current pattern selection
+#define ARP_PATTERN square_arp;
 
 // Musical scales
 const uint8_t dorian_scale[] = { 0, 2, 3, 5, 7, 9, 10, 12 };
