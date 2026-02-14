@@ -207,20 +207,20 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   }
 
   // Find & add note offsets from pattern
-  int8_t x = ARPEGGIATOR_PATTERN[seqIndex][0] * COLUMN_OFFSET;
-  int8_t y = ARPEGGIATOR_PATTERN[seqIndex][1] * ROW_OFFSET;
+  int8_t x = arpPattern[seqIndex][0] * COLUMN_OFFSET;
+  int8_t y = arpPattern[seqIndex][1] * ROW_OFFSET;
 
   uint8_t newNote = noot->rootNote + x + y;
   newNote = noteQuantized(newNote);
 
   uint8_t oldNote = noot->currNote;
-  Point oldGridCoords = Point(ARPEGGIATOR_PATTERN[oldSeqIndex][0],ARPEGGIATOR_PATTERN[oldSeqIndex][1]);
+  Point oldGridCoords = Point(arpPattern[oldSeqIndex][0],arpPattern[oldSeqIndex][1]);
 
   // Find grid xy coordinates for LED control
   Point gridCoords = MatrixOS::KeyPad::ID2XY(noot->gridId);
-  // gridCoords.x += ARPEGGIATOR_PATTERN[seqIndex][0];
-  // gridCoords.y += ARPEGGIATOR_PATTERN[seqIndex][1];
-  gridCoords = gridCoords.operator+(Point(ARPEGGIATOR_PATTERN[seqIndex][0],ARPEGGIATOR_PATTERN[seqIndex][1]));
+  // gridCoords.x += arpPattern[seqIndex][0];
+  // gridCoords.y += arpPattern[seqIndex][1];
+  gridCoords = gridCoords.operator+(Point(arpPattern[seqIndex][0],arpPattern[seqIndex][1]));
 
   if (oldNote != NULL_NOTE) {
     // Stop previous note in sequence
@@ -273,17 +273,16 @@ uint8_t Arpy::noteQuantized(uint8_t note) {
   uint8_t ofs = note - (oct * 12);
 
   // Find nearest value from scale
-  uint8_t nofs = SYNTH_SCALE[0];
+  uint8_t nofs = synthScale[0];
   for (int i = 7; i > 0; i--) {
-    if (ofs >= SYNTH_SCALE[i]) {
-      nofs = SYNTH_SCALE[i];
+    if (ofs >= synthScale[i]) {
+      nofs = synthScale[i];
       break;
     }
   }
 
   // Reapply octave
   note = oct * 12 + nofs;
-
   return note;
 }
 

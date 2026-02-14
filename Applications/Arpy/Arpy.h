@@ -55,7 +55,6 @@ public:
   const uint8_t launchpad_scale[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
   // Current scale selection
   int8_t synthScale = dorian_scale
-  #define SYNTH_SCALE dorian_scale
 
   // Arpeggiator patterns (x, y offsets)
   const int8_t dipper_arp[ARP_NOTE_COUNT][2] = {
@@ -84,7 +83,6 @@ public:
   };
   // Current pattern selection
   int8_t arpPattern = square_arp
-  #define ARPEGGIATOR_PATTERN square_arp
 
   // Core lifecycle methods
   void Setup(const vector<string>& args) override;
