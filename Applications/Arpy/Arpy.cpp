@@ -106,7 +106,7 @@ void Arpy::MidiEventHandler(MidiPacket* midiPacket) {
     if (velocity == 0) {
       handleNoteOff(channel, note, velocity);
     } else {
-      handleNoteOn(channel, note, velocity);
+      handleNoteOn(NULL_ID, channel, note, velocity);  // REPLACE NULL GRID ID W ID CONVERTED FROM NOTE
     }
   }
   // Check if this is a Note Off message
@@ -123,12 +123,13 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
 
   // Example: Map grid buttons to MIDI notes
   // uint8_t noteNum = keyEvent->ID() + 36; 
-  Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
+  uint16_t gridId = keyEvent->ID()
+  Point xy = MatrixOS::KeyPad::ID2XY(gridId);
   uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET); // +36 = start at C2
   uint16_t id = keyEvent->ID();
 
   if (keyEvent->Active()) {
-    handleNoteOn(MIDI_CHANNEL, noteNum, 100);
+    handleNoteOn(gridId, MIDI_CHANNEL, noteNum, 100);
 
     // Light up the pressed key
     // Point xy = MatrixOS::KeyPad::ID2XY(keyEvent->ID());
@@ -137,7 +138,6 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   } 
   
   else {
-    uint8_t noteNum = keyEvent->ID() + 36;
     handleNoteOff(MIDI_CHANNEL, noteNum, 100);
 
     // Turn off the LED
@@ -147,7 +147,7 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
   }
 }
 
-void Arpy::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
+void Arpy::handleNoteOn(uint16_t gridId, uint8_t channel, uint8_t note, uint8_t velocity) {
   // Check if note is already in array
   for (int i = 0; i < POLYPHONY; i++) {
     if (notesHeld[i].rootNote == note) {
@@ -158,7 +158,7 @@ void Arpy::handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity) {
     else if (notesHeld[i].rootNote == NULL_NOTE) {
       // Add the note here
       MLOGD("Arpy", "Adding note: %d", note);
-      notesHeld[i] = {note, NULL_NOTE, NULL_INDEX};
+      notesHeld[i] = {gridId, note, NULL_NOTE, NULL_INDEX};
       return;
     }
   }
