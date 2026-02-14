@@ -116,6 +116,7 @@ private:
   void playArpFromNoteKey(PressedNote* noot);
   void playArpNote(uint8_t note);
   void stopArpNote(uint8_t note);
+  uint16_t noteToGridId(uint8_t note);
 
   // Utility functions
   void compact(PressedNote arr[], size_t len);

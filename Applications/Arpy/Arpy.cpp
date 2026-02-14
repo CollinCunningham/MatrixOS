@@ -43,14 +43,14 @@ void Arpy::Setup(const vector<string>& args) {
   MatrixOS::LED::Update();
 
   // Optional: Startup animation (similar to launchpad test)
-  MLOGI("Arpy", "Running startup animation...");
-  for (int i = 11; i < 89; i++) {
-    MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(noteOn);
-    MatrixOS::SYS::DelayMs(22);
-    MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
-    MatrixOS::MIDI::Send(noteOff);
-  }
+  // MLOGI("Arpy", "Running startup animation...");
+  // for (int i = 11; i < 89; i++) {
+  //   MidiPacket noteOn = MidiPacket::NoteOn(MIDI_CHANNEL, i, 119);
+  //   MatrixOS::MIDI::Send(noteOn);
+  //   MatrixOS::SYS::DelayMs(22);
+  //   MidiPacket noteOff = MidiPacket::NoteOff(MIDI_CHANNEL, i, 119);
+  //   MatrixOS::MIDI::Send(noteOff);
+  // }
 
   MLOGI("Arpy", "Initialization complete. BPM: %d, Channel: %d", BPM, MIDI_CHANNEL + 1);
 }
@@ -59,12 +59,12 @@ void Arpy::Loop() {
   uint32_t currentTime = MatrixOS::SYS::Millis();
 
   // Process incoming MIDI messages
-  if (MIDI_IN_ENABLED) {
-    MidiPacket midiPacket;
-    if (MatrixOS::MIDI::Get(&midiPacket)) {
-      MidiEventHandler(&midiPacket);
-    }
-  }
+  // if (MIDI_IN_ENABLED) {
+  //   MidiPacket midiPacket;
+  //   if (MatrixOS::MIDI::Get(&midiPacket)) {
+  //     MidiEventHandler(&midiPacket);
+  //   }
+  // }
 
   // Process key events (grid buttons)
   KeyEvent keyEvent;
@@ -106,7 +106,7 @@ void Arpy::MidiEventHandler(MidiPacket* midiPacket) {
     if (velocity == 0) {
       handleNoteOff(channel, note, velocity);
     } else {
-      handleNoteOn(NULL_ID, channel, note, velocity);  // REPLACE NULL GRID ID W ID CONVERTED FROM NOTE
+      handleNoteOn(noteToGridId(note), channel, note, velocity);
     }
   }
   // Check if this is a Note Off message
@@ -229,7 +229,7 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   // Play new note
   playArpNote(newNote);
   // Light corresponding LED
-  MatrixOS::LED::SetColor(Point(x,y), arpColor);
+  MatrixOS::LED::SetColor(gridCoords, arpColor);
   MatrixOS::LED::Update();
 
   // Store new note
@@ -290,4 +290,27 @@ void Arpy::printTupleArray(PressedNote arr[], uint8_t len) {
           i, arr[i].rootNote, arr[i].currNote, arr[i].arpIndex);
   }
   MLOGD("Arpy", "====END ARRAY====");
+}
+
+uint16_t Arpy::noteToGridId(uint8_t note) {
+  int16_t offset = note - 36;  // Remove the base note offset
+  
+  // Try to find valid x,y coordinates (assuming 8x8 grid)
+  for (int8_t y = 0; y < 8; y++) {
+    int16_t remaining = offset - (y * ROW_OFFSET);
+    
+    // Check if x would be a valid integer
+    if (remaining >= 0 && remaining % COLUMN_OFFSET == 0) {
+      int8_t x = remaining / COLUMN_OFFSET;
+      
+      // Check if x is within grid bounds
+      if (x >= 0 && x < 8) {
+        Point xy(x, y);
+        return MatrixOS::KeyPad::XY2ID(xy);
+      }
+    }
+  }
+  
+  // If no valid grid position found, return NULL_ID
+  return NULL_ID;
 }
