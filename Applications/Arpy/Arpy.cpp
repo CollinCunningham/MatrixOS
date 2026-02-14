@@ -217,7 +217,7 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   Point gridCoords = MatrixOS::KeyPad::ID2XY(noot->gridId);
   // gridCoords.x += ARPEGGIATOR_PATTERN[seqIndex][0];
   // gridCoords.y += ARPEGGIATOR_PATTERN[seqIndex][1];
-  gridCoords = gridCoords.operator+(Point(ARPEGGIATOR_PATTERN[seqIndex][0],ARPEGGIATOR_PATTERN[seqIndex][1]))
+  gridCoords = gridCoords.operator+(Point(ARPEGGIATOR_PATTERN[seqIndex][0],ARPEGGIATOR_PATTERN[seqIndex][1]));
 
   if (oldNote != NULL_NOTE) {
     // Stop previous note in sequence
@@ -236,8 +236,6 @@ void Arpy::playArpFromNoteKey(PressedNote* noot) {
   // Store new note
   noot->currNote = newNote;
   noot->arpIndex = seqIndex;
-
-  FUNCTION_KEY
 
 }
 
