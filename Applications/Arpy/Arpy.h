@@ -110,7 +110,7 @@ private:
   Color arpColor;       // Note triggered by arp sequence
 
   // Arpeggiator functions
-  void handleNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
+  void handleNoteOn(uint16_t gridId, uint8_t channel, uint8_t note, uint8_t velocity);
   void handleNoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
   void respondToPresses();
   void playArpFromNoteKey(PressedNote* noot);

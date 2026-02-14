@@ -123,7 +123,7 @@ void Arpy::KeyEventHandler(KeyEvent* keyEvent) {
 
   // Example: Map grid buttons to MIDI notes
   // uint8_t noteNum = keyEvent->ID() + 36; 
-  uint16_t gridId = keyEvent->ID()
+  uint16_t gridId = keyEvent->ID();
   Point xy = MatrixOS::KeyPad::ID2XY(gridId);
   uint8_t noteNum = 36 + (xy.x * COLUMN_OFFSET) + (xy.y * ROW_OFFSET); // +36 = start at C2
   uint16_t id = keyEvent->ID();
